@@ -1,41 +1,22 @@
 name: Compilar Dylib
 
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
+on: [push]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-
+    runs-on: macos-latest
     steps:
-      - name: Checkout do código
+      - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Instalar dependências
+      - name: Instalar Theos
         run: |
-          sudo apt update
-          sudo apt install -y git build-essential curl xz-utils
-
-      - name: Configurar Theos
-        run: |
-          export THEOS=~/theos
+          git clone --recursive https://github.com/theos/theos.git ~/theos
           echo "THEOS=~/theos" >> $GITHUB_ENV
-          git clone --recursive https://github.com/theos/theos.git $THEOS
-          # Baixar SDK 12.4 do repositório oficial do Theos (link verificado)
-          mkdir -p $THEOS/sdks
-          curl -L -o sdk.tar.xz https://github.com/theos/sdks/releases/download/master/iPhoneOS12.4.sdk.tar.xz
-          tar -xf sdk.tar.xz -C $THEOS/sdks
-          rm sdk.tar.xz
-
       - name: Compilar
         run: |
-          export THEOS=~/theos
           make clean
           make
-
-      - name: Upload da dylib
+      - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: KeyLogin.dylib
