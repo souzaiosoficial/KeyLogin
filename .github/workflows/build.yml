@@ -16,19 +16,18 @@ jobs:
       - name: Instalar dependências
         run: |
           sudo apt update
-          sudo apt install -y git build-essential curl python3
+          sudo apt install -y git build-essential curl xz-utils
 
       - name: Configurar Theos
         run: |
           export THEOS=~/theos
           echo "THEOS=~/theos" >> $GITHUB_ENV
           git clone --recursive https://github.com/theos/theos.git $THEOS
-          # Baixar SDK usando o script oficial do theos/sdks
-          git clone https://github.com/theos/sdks.git $THEOS/sdks-temp
-          python3 $THEOS/sdks-temp/download.py iPhoneOS13.7.sdk
+          # Baixar SDK 12.4 do repositório oficial do Theos (link verificado)
           mkdir -p $THEOS/sdks
-          mv $THEOS/sdks-temp/iPhoneOS13.7.sdk $THEOS/sdks/
-          rm -rf $THEOS/sdks-temp
+          curl -L -o sdk.tar.xz https://github.com/theos/sdks/releases/download/master/iPhoneOS12.4.sdk.tar.xz
+          tar -xf sdk.tar.xz -C $THEOS/sdks
+          rm sdk.tar.xz
 
       - name: Compilar
         run: |
