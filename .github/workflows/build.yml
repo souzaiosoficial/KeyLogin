@@ -16,18 +16,18 @@ jobs:
       - name: Instalar dependências
         run: |
           sudo apt update
-          sudo apt install -y git build-essential curl unzip
+          sudo apt install -y git build-essential curl xz-utils
 
       - name: Configurar Theos
         run: |
           export THEOS=~/theos
           echo "THEOS=~/theos" >> $GITHUB_ENV
           git clone --recursive https://github.com/theos/theos.git $THEOS
-          # Baixar SDK 14.5 (fonte alternativa que funciona)
+          # Baixar SDK 14.5 do repositório oficial do Theos
           mkdir -p $THEOS/sdks
-          curl -L -o sdk.zip https://github.com/xybp888/iOS-SDKs/raw/master/iPhoneOS14.5.sdk.zip
-          unzip sdk.zip -d $THEOS/sdks
-          rm sdk.zip
+          curl -L https://github.com/theos/sdks/releases/download/master/iPhoneOS14.5.sdk.tar.xz -o sdk.tar.xz
+          tar -xf sdk.tar.xz -C $THEOS/sdks
+          rm sdk.tar.xz
 
       - name: Compilar
         run: |
