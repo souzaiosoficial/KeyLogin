@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/roothide/theos-build:latest
+      image: ghcr.io/theos/theos:latest
 
     steps:
       - name: Checkout do código
