@@ -8,15 +8,28 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/theos/theos:latest
 
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Compilar com make
+      - name: Instalar dependências
         run: |
+          sudo apt update
+          sudo apt install -y git build-essential curl unzip
+
+      - name: Configurar Theos
+        run: |
+          export THEOS=~/theos
+          echo "THEOS=~/theos" >> $GITHUB_ENV
+          git clone --recursive https://github.com/theos/theos.git $THEOS
+          # Baixar SDK (iOS 13.7)
+          mkdir -p $THEOS/sdks
+          curl -L https://github.com/theos/sdks/releases/download/master/iPhoneOS13.7.sdk.tar.xz | tar -xJ -C $THEOS/sdks
+
+      - name: Compilar
+        run: |
+          export THEOS=~/theos
           make clean
           make
 
