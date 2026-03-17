@@ -1,0 +1,27 @@
+name: Compilar Dylib
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/roothide/theos-build:latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Compilar com make
+        run: |
+          make clean
+          make
+
+      - name: Upload da dylib
+        uses: actions/upload-artifact@v4
+        with:
+          name: KeyLogin.dylib
+          path: .theos/obj/debug/KeyLogin.dylib
