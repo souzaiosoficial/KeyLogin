@@ -17,7 +17,6 @@
     NSString *saved = [defaults objectForKey:@"device_id"];
     if (saved) return saved;
     
-    // Tentar ler do Keychain
     NSDictionary *query = @{
         (id)kSecClass: (id)kSecClassGenericPassword,
         (id)kSecAttrService: @"com.seuapp.deviceid",
@@ -35,10 +34,7 @@
         return deviceID;
     }
     
-    // Gerar novo UUID
     NSString *newID = [[NSUUID UUID] UUIDString];
-    
-    // Salvar no Keychain
     NSData *data = [newID dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *addQuery = @{
         (id)kSecClass: (id)kSecClassGenericPassword,
