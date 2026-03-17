@@ -23,9 +23,11 @@ jobs:
           export THEOS=~/theos
           echo "THEOS=~/theos" >> $GITHUB_ENV
           git clone --recursive https://github.com/theos/theos.git $THEOS
-          # Baixar SDK (iOS 13.7)
+          # Baixar SDK 14.5 (fonte alternativa que funciona)
           mkdir -p $THEOS/sdks
-          curl -L https://github.com/theos/sdks/releases/download/master/iPhoneOS13.7.sdk.tar.xz | tar -xJ -C $THEOS/sdks
+          curl -L -o sdk.zip https://github.com/xybp888/iOS-SDKs/raw/master/iPhoneOS14.5.sdk.zip
+          unzip sdk.zip -d $THEOS/sdks
+          rm sdk.zip
 
       - name: Compilar
         run: |
